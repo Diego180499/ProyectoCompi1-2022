@@ -59,6 +59,7 @@ non terminal String N1;
 non terminal String N;
 non terminal String F4;
 non terminal String T;
+non terminal String V;
 
 start with S1;
 
@@ -73,7 +74,7 @@ S2 ::= R2
 
 //PRODUCCION QUE GENERA REPORTES DE UNA CLASE
 S3 ::= R1 D3 CORCHETE_C
-    
+    | V
 ;
 
 D3 ::= LLAVES_A N LLAVES_C
@@ -123,9 +124,11 @@ R2 ::= S3
 
 //GENERA LA INICIALIZACION DE UN REPORTE
 
-R1 ::= N1 DOS_PUNTOS CORCHETE_A
+V ::= R1 CORCHETE_C
 ;
 
+R1 ::= N1 DOS_PUNTOS CORCHETE_A
+;
 
 N1 ::= CLASES
    | VARIABLES
