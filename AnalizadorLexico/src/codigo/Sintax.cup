@@ -1,0 +1,505 @@
+package codigo;
+
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+
+parser code
+
+{:
+
+    private Symbol s;
+    private ArrayList<Clase> clases = new ArrayList<>();
+    private ArrayList<Variable> variables = new ArrayList<>();
+    private ArrayList<Funcion> funciones = new ArrayList<>();
+
+    public Symbol getS(){
+        return this.s;
+    }
+
+    public Clase clase;
+
+    public void crearClase(String nombreClase, String variables){  //variables = public-int-var1,public-String-var2
+         Clase clase = new Clase(nombreClase);
+        String datosVariables[] = variables.split(",");  //  {public-int-var1, public-String-var2}
+
+        
+
+        for (int i = 0; i < datosVariables.length; i++) {
+            char caracter = datosVariables[i].charAt(0);
+            if (!(caracter == '*')) {
+                String[] datos = datosVariables[i].split("-"); //{public,int,var1}
+                String visibilidad = datos[0];
+                String tipo = datos[1];
+                String nombre = datos[2];
+
+                Variable variable = new Variable(tipo, nombre, nombreClase, "Variable");
+                this.variables.add(variable);
+
+            }
+
+        }
+
+        this.getClases().add(clase);
+    }
+
+    public void crearVariable(String tipo, String nombres){
+        String [] nombresVariables = nombres.split(",");
+        
+        for(int i=0; i<nombresVariables.length; i++){
+            Variable variable = new Variable(tipo, nombresVariables[i]);
+            this.variables.add(variable);
+        }
+    }
+
+    public void crearMetodo(String tipoMetodo, String nombreMetodo, String parametros, String variablesMetodo){
+
+        String[] datosDeParametros = parametros.split(",");
+        ArrayList<Variable> param = new ArrayList<>();
+        
+            String datos;
+            if(!parametros.equals("*")){
+         
+                for(int i=0; i<datosDeParametros.length; i++){
+                    datos = datosDeParametros[i];
+                    String [] datosParametro = datos.split("-");
+                    String nombreVariable = datosParametro[0];
+                    String tipoVariable = datosParametro[1];
+                    String funcionPadre = nombreMetodo;
+                    String rol = "Parametro";
+                    Variable variable = new Variable(tipoVariable, nombreVariable, funcionPadre, rol);
+                    param.add(variable);
+                    this.variables.add(variable);
+                }
+            }
+
+            Funcion funcion = new Funcion(tipoMetodo, nombreMetodo, param);
+            funciones.add(funcion);
+            
+
+        //aqui irá el analisis de las variables dentro del metodo
+        char caracter = variablesMetodo.charAt(0);
+        if(!(caracter == '*')){
+            String[] datosDeVariables = variablesMetodo.split(",");   //variablesMetodo = int-var1,int-var2
+            String datosV; //public-int-var1
+            for(int i=0; i<datosDeVariables.length; i++){
+                datosV = datosDeVariables[i];  //int-var1
+                String [] datosVariable = datosV.split("-");  // datosVariable = {int,var1}
+                String tipoVariable = datosVariable[0];
+                String nombreVariable = datosVariable[1];
+                String funcionPadre = nombreMetodo;
+                String rol = "Variable";
+                Variable variable = new Variable(tipoVariable, nombreVariable, funcionPadre, rol);
+                this.variables.add(variable);
+            }
+        }
+    }
+
+
+    /*AQUI  IRAN  TODOS  LOS  GET'S  DE  NUESTROS  ARRAYS*/
+
+    public ArrayList<Clase> getClases(){
+        return clases;
+    }
+
+    public ArrayList<Funcion> getFunciones(){
+        return funciones;
+    }
+
+    public ArrayList<Variable> getVariables(){
+        return variables;
+    }
+    
+    
+    
+
+:};
+
+terminal String CADENA;
+terminal String PARENTESIS_A;
+terminal String PARENTESIS_C;
+terminal String LLAVES_A;
+terminal String LLAVES_C;
+terminal String DOS_PUNTOS;
+terminal String P_COMA;
+terminal String COMA;
+terminal String CORCHETE_A;
+terminal String CORCHETE_C;
+terminal String IGUAL;
+terminal String MAS;
+terminal String MENOS;
+terminal String DIVISION;
+terminal String MULTIPLICACION;
+terminal String MENOR;
+terminal String MAYOR;
+terminal String NEGACION;
+terminal String IMPORT;
+terminal String CLASE;
+terminal String VOID;
+terminal String PUBLIC;
+terminal String PRIVATE;
+terminal String PROTECTED;
+terminal String FINAL;
+terminal String INT;
+terminal String STRING;
+terminal String BOOLEAN;
+terminal String CHAR;
+terminal String DOUBLE;
+terminal String IF;
+terminal String ELSE;
+terminal String SWITCH;
+terminal String CASE;
+terminal String BREAK;
+terminal String FOR;
+terminal String WHILE;
+terminal String DO;
+terminal String RETURN;
+terminal String NUMERO;
+terminal String DECIMAL;
+terminal String IDENTIFICADOR;
+terminal String PUNTO;
+terminal String ERROR;
+
+non terminal String S1;
+non terminal String S2;
+non terminal String S3;
+non terminal String S4;
+non terminal String S5;
+non terminal String S6;
+non terminal String S7;
+non terminal String S8;
+non terminal String S9;
+non terminal String S10;
+non terminal String S11;
+non terminal String S12;
+non terminal String S13;
+non terminal String S16;
+non terminal String I1;
+non terminal String C2;
+non terminal String E2;
+non terminal String I2;
+non terminal String M;
+non terminal String T3;
+non terminal String E3;
+non terminal String P3;
+non terminal String D4;
+non terminal String I4;
+non terminal String A5;
+non terminal String I5;
+non terminal String E;
+non terminal String D6;
+non terminal String I6;
+non terminal String F;
+non terminal String C8;
+non terminal String E8;
+non terminal String F8;
+non terminal String J8;
+non terminal String F9;
+non terminal String A9;
+non terminal String E9;
+non terminal String C9;
+non terminal String I9;
+non terminal String X9;
+non terminal String W;
+non terminal String C10;
+non terminal String E10;
+non terminal String D;
+non terminal String W11;
+non terminal String E11;
+non terminal String W12;
+non terminal String C11;
+non terminal String C12;
+non terminal String K12;
+non terminal String K;
+non terminal String E12;
+non terminal String P13;
+non terminal String C;
+non terminal String S17;
+non terminal String S18;
+non terminal String EXPRESION;
+non terminal String V;
+non terminal String P;
+
+start with S2;
+
+            //AQUÍ VAN LAS PRODUCCIONES
+
+//ESTRUCTURA DE UNA CLASE
+S2 ::= C2
+;
+
+C2 ::= I2 V CLASE IDENTIFICADOR:nombre LLAVES_A E2:variables LLAVES_C  {: crearClase(nombre,variables); :}
+    | I2 V CLASE IDENTIFICADOR:nombre LLAVES_A LLAVES_C      {: crearClase(nombre,"*"); :}
+    | V CLASE IDENTIFICADOR:nombre LLAVES_A LLAVES_C         {: crearClase(nombre,"*"); :}
+    | V CLASE IDENTIFICADOR:nombre LLAVES_A E2:variables LLAVES_C      {: crearClase(nombre, variables); :}
+;
+
+
+E2 ::= S13:s  {: RESULT = String.format(s); :} 
+    | S13:s E2:e {: RESULT = String.format(s+","+e); :}
+;
+
+I2 ::= S1
+    | S1 I2
+;
+
+//ESTRUCTURA DE UN IMPORT
+
+S1 ::= IMPORT I1 P_COMA   // "import,java,;"
+;
+I1 ::= IDENTIFICADOR 
+    | IDENTIFICADOR PUNTO I1
+;
+
+
+
+
+
+// ESTRUCTURAS DE METODOS Y/O FUNCIONES
+
+S3 ::= M
+;
+M ::= V T3:tipo IDENTIFICADOR:nombre PARENTESIS_A P3:parametros PARENTESIS_C LLAVES_A E3:variables LLAVES_C {: crearMetodo(tipo, nombre, parametros, variables); :}  // CON PARAMETROS Y SENTENCIAS
+      | V T3:tipo IDENTIFICADOR:nombre PARENTESIS_A P3:parametros PARENTESIS_C LLAVES_A E3:variables RETURN P P_COMA LLAVES_C  {: crearMetodo(tipo, nombre, parametros,variables); :} //CON PARAMETROS, SENTENCIAS Y RETURN
+      | V T3:tipo IDENTIFICADOR:nombre PARENTESIS_A  PARENTESIS_C LLAVES_A E3:variables LLAVES_C {: crearMetodo(tipo, nombre,"*",variables); :}   //SIN PARAMETROS, SENTENCIAS
+      | V T3:tipo IDENTIFICADOR:nombre PARENTESIS_A  PARENTESIS_C LLAVES_A E3:variables RETURN P P_COMA LLAVES_C  {: crearMetodo(tipo, nombre,"*",variables); :}   //SIN PARAMETROS, SENTENCIAS Y RETURN
+      | V T3:tipo IDENTIFICADOR:nombre PARENTESIS_A P3:parametros PARENTESIS_C LLAVES_A  LLAVES_C  {: crearMetodo(tipo, nombre, parametros, "*"); :} // CON PARAMETROS, SIN SENTENCIA
+      | V T3:tipo IDENTIFICADOR:nombre PARENTESIS_A P3:parametros PARENTESIS_C LLAVES_A RETURN P P_COMA LLAVES_C  {: crearMetodo(tipo, nombre, parametros, "*"); :} // CON PARAMETROS, SIN SENTENCIA, CON RETURN
+      | V T3:tipo IDENTIFICADOR:nombre PARENTESIS_A  PARENTESIS_C LLAVES_A  LLAVES_C  {: crearMetodo(tipo, nombre,"*", "*"); :}  //SIN PARAMETROS Y SIN SENTENCIA
+      | V T3:tipo IDENTIFICADOR:nombre PARENTESIS_A  PARENTESIS_C LLAVES_A  RETURN P P_COMA LLAVES_C  {: crearMetodo(tipo, nombre,"*", "*"); :}  //SIN PARAMETROS Y SIN SENTENCIA, CON RETURN
+;
+
+E3 ::= S13:s {: RESULT = String.format(s); :} 
+    | S13:s E3:e {: RESULT = String.format(s+","+e); :}
+;
+
+
+P3 ::= T3:tipo IDENTIFICADOR:nombre   {: RESULT = String.format(tipo+"-"+nombre); :}
+    | T3:tipo IDENTIFICADOR:nombre COMA:coma P3:p        {: RESULT = String.format(tipo+"-"+nombre+coma+p); :}
+;
+
+
+// ESTRUCTURA DE DECLARACION DE VARIABLES
+
+S4 ::= D4:d   {: RESULT = String.format(d); :}
+;
+D4 ::= V:v T3:tipo I4:nombre P_COMA {: RESULT = String.format(v+"-"+tipo+"-"+nombre); :}
+     | T3:tipo I4:nombre P_COMA {: RESULT = String.format("public"+"-"+tipo+"-"+nombre); :}
+;
+
+// ESTRUCTURA DE ASIGNACION
+
+S5 ::= A5:a {: RESULT = String.format(a); :}
+;
+
+A5 ::= V:v T3:tipo I4:nombre IGUAL P P_COMA {: RESULT = String.format(v+"-"+tipo+"-"+nombre); :}
+    | T3:tipo I4:nombre IGUAL P P_COMA    {: RESULT = String.format("public"+"-"+tipo+"-"+nombre); :}
+;
+
+// ESTRUCTURA DE UN CONSTRUCTOR
+
+S6 ::= V IDENTIFICADOR PARENTESIS_A I6 PARENTESIS_C LLAVES_A D6 LLAVES_C  //CONSTRUCTOR CON PARAMETROS
+      | V IDENTIFICADOR PARENTESIS_A PARENTESIS_C LLAVES_A D6 LLAVES_C   //CONSTRUCTOR SIN PARAMETROS
+      | V IDENTIFICADOR PARENTESIS_A PARENTESIS_C LLAVES_A LLAVES_C   //CONSTRUCTOR SIN PARAMETROS Y SIN SENTENCIAS
+;
+D6 ::= S13 
+    | S13 D6
+;
+
+I6 ::= T3 IDENTIFICADOR 
+    | T3 IDENTIFICADOR COMA I6
+;
+
+
+// ESTRUCTURA DE LLAMADA A FUNCIÓN / MÉTODO
+
+S7 ::= F
+;
+
+F ::= IDENTIFICADOR PARENTESIS_A I4 PARENTESIS_C P_COMA 
+    | IDENTIFICADOR PARENTESIS_A PARENTESIS_C P_COMA
+;
+
+
+// ESTRUCTURA DE IF
+
+S8 ::= F8
+;
+F8 ::= IF PARENTESIS_A C8 PARENTESIS_C LLAVES_A E8 LLAVES_C        // SIN RETURN
+    | IF PARENTESIS_A C8 PARENTESIS_C LLAVES_A E8 RETURN P P_COMA LLAVES_C //CON RETURN
+    | IF PARENTESIS_A C8 PARENTESIS_C LLAVES_A RETURN P P_COMA LLAVES_C //CON RETURN Y SIN SENTENCIAS
+    | IF PARENTESIS_A C8 PARENTESIS_C LLAVES_A E8 LLAVES_C J8        // SIN RETURN Y CON ELSE
+    | IF PARENTESIS_A C8 PARENTESIS_C LLAVES_A E8 RETURN P P_COMA LLAVES_C J8 //CON RETURN Y CON ELSE
+    | IF PARENTESIS_A C8 PARENTESIS_C LLAVES_A RETURN P P_COMA LLAVES_C J8 //CON RETURN Y SIN SENTENCIAS Y CON ELSE
+;
+
+C8 ::= S16
+;
+E8 ::= S13 
+    | S13 E8
+;
+
+J8 ::= ELSE LLAVES_A E8 LLAVES_C    //ELSE SIN RETURN
+    | ELSE LLAVES_A E8 RETURN P P_COMA LLAVES_C   //ELSE CON RETURN
+;
+
+// ESTRUCTURA DE UN CICLO FOR
+
+S9 ::= F9
+;
+F9 ::= FOR PARENTESIS_A A9 C9 I9 PARENTESIS_C LLAVES_A X9 LLAVES_C
+;
+A9 ::= INT IDENTIFICADOR IGUAL E9 P_COMA
+;
+E9 ::= EXPRESION
+;
+C9 ::= IDENTIFICADOR MENOR E9 P_COMA
+;
+I9 ::= IDENTIFICADOR MAS MAS
+;
+
+X9 ::= S13 
+    | S13 X9
+;
+
+
+// ESTRUCTURA DE UN WHILE
+
+S10 ::= W
+;
+W ::= WHILE PARENTESIS_A C10 LLAVES_A E10 LLAVES_C
+;
+C10 ::= S16 PARENTESIS_C
+;
+E10 ::= S13 
+    | S13 E10
+;
+
+
+// ESTRUCTURA DE UN DO WHILE
+
+S11 ::= D
+;
+D ::= DO LLAVES_A E11 LLAVES_C W11
+;
+W11 ::= WHILE PARENTESIS_A C11 PARENTESIS_C P_COMA
+;
+C11 ::= S16
+;
+
+E11 ::= S13 
+    | S13 E11
+;
+
+// ESTRUCTURA DE UN SWITCH
+
+S12 ::= W12
+;
+W12 ::= SWITCH PARENTESIS_A C12 LLAVES_A K12 LLAVES_C
+;
+C12 ::= IDENTIFICADOR PARENTESIS_C
+;
+K12 ::= K 
+    | K K12
+;
+K ::= CASE NUMERO DOS_PUNTOS E12 BREAK P_COMA
+    | CASE CADENA DOS_PUNTOS E12 BREAK P_COMA
+;
+E12 ::= S13 
+    | S13 E12
+;
+
+// ESTRUCTURA DE UNA SENTENCIA
+
+S13 ::= P13:p {: RESULT = String.format(p); :}
+;
+
+P13 ::= S3  {: RESULT = String.format("*"); :}
+    | S4:s4 {: RESULT = String.format(s4); :} 
+    | S5:s5 {: RESULT = String.format(s5); :}
+    | S6    {: RESULT = String.format("*"); :}
+    | S7    {: RESULT = String.format("*"); :}
+    | S8    {: RESULT = String.format("*"); :}
+    | S9    {: RESULT = String.format("*"); :}
+    | S10   {: RESULT = String.format("*"); :}
+    | S11   {: RESULT = String.format("*"); :}
+    | S12   {: RESULT = String.format("*"); :}
+;
+
+
+// ESTRUCTURA DE UNA CONDICION
+
+S16 ::= C
+;
+
+C  ::= IDENTIFICADOR IGUAL IGUAL IDENTIFICADOR
+      | IDENTIFICADOR IGUAL IGUAL CADENA
+      | IDENTIFICADOR NEGACION IGUAL IDENTIFICADOR
+      | IDENTIFICADOR NEGACION IGUAL CADENA
+      | NUMERO IGUAL IGUAL NUMERO
+      | DECIMAL IGUAL IGUAL DECIMAL
+      | NUMERO NEGACION IGUAL NUMERO
+      | DECIMAL NEGACION IGUAL DECIMAL
+      | IDENTIFICADOR MENOR IGUAL NUMERO
+      | IDENTIFICADOR MAYOR IGUAL NUMERO
+      | IDENTIFICADOR IGUAL IGUAL NUMERO
+      | IDENTIFICADOR NEGACION IGUAL  NUMERO
+      | IDENTIFICADOR MAYOR NUMERO
+      | IDENTIFICADOR MENOR NUMERO
+      | NUMERO MAYOR NUMERO
+      | NUMERO MENOR NUMERO
+      | DECIMAL MENOR DECIMAL
+      | DECIMAL MAYOR DECIMAL
+;
+
+                        //**********EXPRESION*******
+
+
+EXPRESION ::= S17:expresion
+;
+
+S17 ::= NUMERO:numero S18:s2  {: RESULT = String.format(numero + s2); :}
+       | PARENTESIS_A:pa S17:s1 PARENTESIS_C S2:s2  {: RESULT = String.format(pa + s1 + s2 ); :} 
+       | NUMERO:num        {: RESULT = String.format(num); :}
+       | DECIMAL:decimal S2:s2        {: RESULT = String.format(decimal + s2); :}
+       | DECIMAL:decimal              {: RESULT = String.format(decimal); :}
+       | PARENTESIS_A:pa S17:s1 PARENTESIS_C:pc  {: RESULT = String.format(pa + s1 + pc); :}
+;
+
+S18 ::=  MAS:suma S17:s1 {: RESULT = String.format(suma + s1); :} 
+        | MENOS:resta S17:s1      {: RESULT = String.format(resta + s1);  :}
+        | DIVISION:div S17:s1          {: RESULT = String.format(div + s1);  :}
+        | MULTIPLICACION:mult S17:s1   {: RESULT = String.format(mult + s1);  :}
+;
+
+//PRODUCE UN TIPO DE ASIGNACION
+T3 ::= VOID:v  {: RESULT = String.format(v); :}
+    | INT:i {: RESULT = String.format(i); :}
+    | STRING:str {: RESULT = String.format(str); :}
+    | BOOLEAN:bool  {: RESULT = String.format(bool); :}
+    | CHAR:ch  {: RESULT = String.format(ch); :}
+    | DOUBLE:db  {: RESULT = String.format(db); :}
+    | IDENTIFICADOR:id  {: RESULT = String.format(id); :}
+;
+
+
+//PRODUCE LA VISIBILIDAD
+
+V ::= PUBLIC:p {: RESULT = String.format(p); :}
+    | PRIVATE:pr       {: RESULT = String.format(pr); :}
+    | PROTECTED:pro   {: RESULT = String.format(pro); :}
+    | FINAL:fin                 {: RESULT = String.format(fin); :}
+;
+
+
+// producciones especiales
+
+I4 ::= IDENTIFICADOR:id {: RESULT = String.format(id); :}
+    | IDENTIFICADOR:id COMA:coma I4:i {: RESULT = String.format(id+coma+i); :}
+;
+
+// PRODUCCION QUE ME GENERA UN ID, EXPRESION O UNA CADENA
+
+P ::= IDENTIFICADOR
+    | EXPRESION
+    | CADENA
+;

@@ -1,0 +1,20 @@
+def Barras{
+
+titulo:"GraficaBarra1";
+ejex:["item1","item2"];
+ejey:[5,10];
+unir:[{1,1},{1,1}];
+}
+
+def Barras{
+
+titulo:"GraficaBarra2";
+ejex:["item1","item2"];
+ejey:[5,10];
+unir:[{1,1},{1,1}];
+
+}
+
+Ejecutar("Grafica1");
+Ejecutar("Grafica2");
+

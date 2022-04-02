@@ -1,0 +1,139 @@
+package json;
+
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+
+parser code
+
+{:
+    
+    private Symbol s;
+    
+
+    public Symbol getS(){
+        return this.s;
+    }
+
+:};
+
+
+terminal String CLASES;
+terminal String VARIABLES;
+terminal String METODOS;
+terminal String NOMBRE;
+terminal String LLAVES_A;
+terminal String LLAVES_C;
+terminal String CORCHETE_A;
+terminal String CORCHETE_C;
+terminal String COMA;
+terminal String DOS_PUNTOS;
+terminal String PUNTO;
+terminal String COMILLAS;
+terminal String IDENTIFICADOR;
+terminal String P_COMA;
+terminal String TIPO;
+terminal String NUMERO;
+terminal String PARAMETROS;
+terminal String FUNCION;
+terminal String CADENA;
+
+
+non terminal String S1;
+non terminal String S2;
+non terminal String S3;
+non terminal String D3;
+non terminal String N3;
+non terminal String S4;
+non terminal String D4;
+non terminal String N4;
+non terminal String T4;
+non terminal String S7;
+non terminal String M7;
+non terminal String D7;
+non terminal String N7;
+non terminal String T7;
+non terminal String P7;
+non terminal String R2;
+non terminal String R1;
+non terminal String N1;
+non terminal String N;
+non terminal String F4;
+non terminal String T;
+
+start with S1;
+
+/* AQUI VAN LAS PRODUCCIONES */
+
+S1 ::= LLAVES_A S2 LLAVES_C
+;
+
+S2 ::= R2
+    | R2 COMA S2
+;
+
+//PRODUCCION QUE GENERA REPORTES DE UNA CLASE
+S3 ::= R1 D3 CORCHETE_C
+    
+;
+
+D3 ::= LLAVES_A N LLAVES_C
+    | LLAVES_A N LLAVES_C COMA D3
+;
+
+
+
+// ESTRUCTURA DE LOS REPORTES DE LAS VARIABLES
+S4 ::= R1 D4 CORCHETE_C
+;
+
+D4 ::= LLAVES_A N COMA T COMA F4 LLAVES_C
+  | LLAVES_A N COMA T COMA F4 LLAVES_C COMA D4
+;
+
+
+
+F4 ::= FUNCION DOS_PUNTOS CADENA
+;
+
+
+
+
+// ESTRUCTURA DE LOS REPORTES DE METODOS
+
+S7 ::= R1 M7 CORCHETE_C
+;
+
+M7 ::= LLAVES_A D7 LLAVES_C
+    | LLAVES_A D7 LLAVES_C COMA M7
+;
+
+D7 ::= N COMA T COMA P7
+;
+
+P7 ::= PARAMETROS DOS_PUNTOS CADENA
+;
+
+
+// ESTA PRODUCCION GENERA LOS REPORTES
+R2 ::= S3
+    |  S4
+    |  S7
+;
+
+
+//GENERA LA INICIALIZACION DE UN REPORTE
+
+R1 ::= N1 DOS_PUNTOS CORCHETE_A
+;
+
+
+N1 ::= CLASES
+   | VARIABLES
+   | METODOS
+;
+
+N ::= NOMBRE DOS_PUNTOS CADENA
+;
+
+T ::= TIPO DOS_PUNTOS CADENA
+;
