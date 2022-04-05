@@ -9,6 +9,7 @@ public class Variable {
     private String nombre;
     private String funcionPadre;
     private String rol;
+    private String funciones;
     private int aparicion;
     private ArrayList<String> funcionesAparecidas;
 
@@ -18,6 +19,16 @@ public class Variable {
         this.aparicion = 1;
         this.funcionesAparecidas = new ArrayList<>();
     }
+    
+    public Variable(String tipo, String nombre, String funciones) {
+        this.tipo = tipo;
+        this.nombre = nombre;
+        this.aparicion = 1;
+        this.funciones = funciones;
+        this.funcionesAparecidas = new ArrayList<>();
+    }
+    
+    
 
     public Variable(String tipo, String nombre, String funcionPadre, String rol) {
         this.tipo = tipo;
@@ -97,5 +108,15 @@ public class Variable {
     public void agregarFuncion(String metodo) {
         this.funcionesAparecidas.add(metodo);
     }
+
+    public String getFunciones() {
+        return funciones;
+    }
+
+    public void setFunciones(String funciones) {
+        this.funciones = funciones;
+    }
+    
+    
 
 }

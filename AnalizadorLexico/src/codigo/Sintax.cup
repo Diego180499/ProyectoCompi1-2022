@@ -34,7 +34,7 @@ parser code
 
                 Variable variable = new Variable(tipo, nombre, nombreClase, "Variable");
                 this.variables.add(variable);
-
+                clase.getVariables().add(variable);
             }
 
         }
