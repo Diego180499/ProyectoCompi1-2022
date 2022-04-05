@@ -5,6 +5,7 @@
 
 package json;
 
+import codigo.*;
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 import java_cup.runtime.XMLElement;
@@ -157,10 +158,45 @@ public class SintaxJ extends java_cup.runtime.lr_parser {
 
     
     private Symbol s;
+    private ArrayList<Clase> clases = new ArrayList<>(); 
+    private ArrayList<Variable> variables = new ArrayList<Variable>();
+    private ArrayList<Funcion> funciones = new ArrayList<Funcion>();
     
 
     public Symbol getS(){
         return this.s;
+    }
+
+
+    public void crearClase(String nombre){
+        Clase clase = new Clase(nombre);
+        this.clases.add(clase);
+    }
+
+    public void crearVariable(String nombre, String tipo, String funciones){
+        Variable variable = new Variable(nombre, tipo, funciones);
+        this.variables.add(variable);
+    }
+
+    public void crearMetodo(String nombre, String tipo, String parametros){
+        
+        Funcion funcion = new Funcion(nombre, tipo, parametros);
+        this.funciones.add(funcion);
+    }
+
+
+    /* LOS GET´S DE LOS ARRAYS*/
+    
+    public ArrayList<Variable> getVariables(){
+        return this.variables;
+    }
+
+    public ArrayList<Funcion> getFunciones(){
+        return this.funciones;
+    }
+
+    public ArrayList<Clase> getClases(){
+        return this.clases;
     }
 
 
@@ -252,7 +288,10 @@ class CUP$SintaxJ$actions {
           case 6: // D3 ::= LLAVES_A N LLAVES_C 
             {
               String RESULT =null;
-
+		int nombreleft = ((java_cup.runtime.Symbol)CUP$SintaxJ$stack.elementAt(CUP$SintaxJ$top-1)).left;
+		int nombreright = ((java_cup.runtime.Symbol)CUP$SintaxJ$stack.elementAt(CUP$SintaxJ$top-1)).right;
+		String nombre = (String)((java_cup.runtime.Symbol) CUP$SintaxJ$stack.elementAt(CUP$SintaxJ$top-1)).value;
+		 System.out.println(nombre); 
               CUP$SintaxJ$result = parser.getSymbolFactory().newSymbol("D3",3, ((java_cup.runtime.Symbol)CUP$SintaxJ$stack.elementAt(CUP$SintaxJ$top-2)), ((java_cup.runtime.Symbol)CUP$SintaxJ$stack.peek()), RESULT);
             }
           return CUP$SintaxJ$result;
@@ -261,7 +300,10 @@ class CUP$SintaxJ$actions {
           case 7: // D3 ::= LLAVES_A N LLAVES_C COMA D3 
             {
               String RESULT =null;
-
+		int nombreleft = ((java_cup.runtime.Symbol)CUP$SintaxJ$stack.elementAt(CUP$SintaxJ$top-3)).left;
+		int nombreright = ((java_cup.runtime.Symbol)CUP$SintaxJ$stack.elementAt(CUP$SintaxJ$top-3)).right;
+		String nombre = (String)((java_cup.runtime.Symbol) CUP$SintaxJ$stack.elementAt(CUP$SintaxJ$top-3)).value;
+		 System.out.println(nombre); 
               CUP$SintaxJ$result = parser.getSymbolFactory().newSymbol("D3",3, ((java_cup.runtime.Symbol)CUP$SintaxJ$stack.elementAt(CUP$SintaxJ$top-4)), ((java_cup.runtime.Symbol)CUP$SintaxJ$stack.peek()), RESULT);
             }
           return CUP$SintaxJ$result;
@@ -423,7 +465,10 @@ class CUP$SintaxJ$actions {
           case 25: // N ::= NOMBRE DOS_PUNTOS CADENA 
             {
               String RESULT =null;
-
+		int cadenaleft = ((java_cup.runtime.Symbol)CUP$SintaxJ$stack.peek()).left;
+		int cadenaright = ((java_cup.runtime.Symbol)CUP$SintaxJ$stack.peek()).right;
+		String cadena = (String)((java_cup.runtime.Symbol) CUP$SintaxJ$stack.peek()).value;
+		 RESULT = String.format(cadena); 
               CUP$SintaxJ$result = parser.getSymbolFactory().newSymbol("N",18, ((java_cup.runtime.Symbol)CUP$SintaxJ$stack.elementAt(CUP$SintaxJ$top-2)), ((java_cup.runtime.Symbol)CUP$SintaxJ$stack.peek()), RESULT);
             }
           return CUP$SintaxJ$result;

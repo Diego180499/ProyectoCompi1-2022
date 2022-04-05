@@ -20,7 +20,6 @@ parser code
 
     public void crearClase(String nombreClase, String variables){  //variables = public-int-var1,public-String-var2
          Clase clase = new Clase(nombreClase);
-
         String datosVariables[] = variables.split(",");  //  {public-int-var1, public-String-var2}
 
         
@@ -35,10 +34,12 @@ parser code
 
                 Variable variable = new Variable(tipo, nombre, nombreClase, "Variable");
                 this.variables.add(variable);
-
+                clase.getVariables().add(variable);
             }
 
         }
+
+        this.getClases().add(clase);
     }
 
     public void crearVariable(String tipo, String nombres){
@@ -71,7 +72,7 @@ parser code
                 }
             }
 
-            Funcion funcion = new Funcion(tipoMetodo, nombreMetodo, param.size());
+            Funcion funcion = new Funcion(tipoMetodo, nombreMetodo, param);
             funciones.add(funcion);
             
 

@@ -9,6 +9,7 @@ public class Funcion {
     private int cantidadParametros;
     private ArrayList<Variable> parametros;
     private ArrayList<Variable> variables;
+    private String funciones;
     private int aparicion;
 
     public Funcion(String tipo, String nombre, ArrayList<Variable> parametros) {
@@ -17,6 +18,14 @@ public class Funcion {
         this.aparicion = 1;
         this.parametros = parametros;
     }
+
+    public Funcion(String tipo, String nombre, String funciones) {
+        this.tipo = tipo;
+        this.nombre = nombre;
+        this.funciones = funciones;
+    }
+    
+    
 
     public Funcion(String tipo, String nombre) {
         this.tipo = tipo;

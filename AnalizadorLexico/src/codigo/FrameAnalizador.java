@@ -5,10 +5,7 @@
  */
 package codigo;
 
-import java.io.FileNotFoundException;
 import java.io.StringReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import reporte.ReporteJSON;
@@ -249,7 +246,7 @@ public class FrameAnalizador extends javax.swing.JFrame {
         reporteJSON.setText(reporteTotal);
         LexerJson lexerJson = new LexerJson(new StringReader(reporteJSON.getText()));
         SintaxJ sintax = new SintaxJ(lexerJson);
-
+        
         try {
             sintax.parse();
             JOptionPane.showMessageDialog(null, "Reporte Generado Correctamente");

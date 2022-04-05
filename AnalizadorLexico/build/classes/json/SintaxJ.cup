@@ -1,4 +1,6 @@
 package json;
+import codigo.*;
+
 
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
@@ -8,10 +10,45 @@ parser code
 {:
     
     private Symbol s;
+    private ArrayList<Clase> clases = new ArrayList<>(); 
+    private ArrayList<Variable> variables = new ArrayList<Variable>();
+    private ArrayList<Funcion> funciones = new ArrayList<Funcion>();
     
 
     public Symbol getS(){
         return this.s;
+    }
+
+
+    public void crearClase(String nombre){
+        Clase clase = new Clase(nombre);
+        this.clases.add(clase);
+    }
+
+    public void crearVariable(String nombre, String tipo, String funciones){
+        Variable variable = new Variable(nombre, tipo, funciones);
+        this.variables.add(variable);
+    }
+
+    public void crearMetodo(String nombre, String tipo, String parametros){
+        
+        Funcion funcion = new Funcion(nombre, tipo, parametros);
+        this.funciones.add(funcion);
+    }
+
+
+    /* LOS GET´S DE LOS ARRAYS*/
+    
+    public ArrayList<Variable> getVariables(){
+        return this.variables;
+    }
+
+    public ArrayList<Funcion> getFunciones(){
+        return this.funciones;
+    }
+
+    public ArrayList<Clase> getClases(){
+        return this.clases;
     }
 
 :};
@@ -59,6 +96,7 @@ non terminal String N1;
 non terminal String N;
 non terminal String F4;
 non terminal String T;
+non terminal String V;
 
 start with S1;
 
@@ -72,11 +110,12 @@ S2 ::= R2
 ;
 
 //PRODUCCION QUE GENERA REPORTES DE UNA CLASE
-S3 ::= R1 D3 CORCHETE_C
+S3 ::= R1 D3:nombre CORCHETE_C  {: crearClase(nombre); :}  /* AQUÍ CREAMOS UNA CLASE*/
+    | V
 ;
 
-D3 ::= LLAVES_A N LLAVES_C
-    | LLAVES_A N LLAVES_C COMA D3
+D3 ::= LLAVES_A N:nombre LLAVES_C         {: RESULT = String.format(nombre); :}
+    | LLAVES_A N:nombre LLAVES_C COMA D3  {: RESULT = String.format(nombre); :}
 ;
 
 
@@ -85,13 +124,12 @@ D3 ::= LLAVES_A N LLAVES_C
 S4 ::= R1 D4 CORCHETE_C
 ;
 
-D4 ::= LLAVES_A N COMA T COMA F4 LLAVES_C
-  | LLAVES_A N COMA T COMA F4 LLAVES_C COMA D4
+D4 ::= LLAVES_A N:nombre COMA T:tipo COMA F4:funciones LLAVES_C        {: crearVariable(nombre,tipo,funciones); :}
+  | LLAVES_A N:nombre COMA T:tipo COMA F4:funciones LLAVES_C COMA D4   {: crearVariable(nombre,tipo,funciones); :}
 ;
 
 
-
-F4 ::= FUNCION DOS_PUNTOS CADENA
+F4 ::= FUNCION DOS_PUNTOS CADENA:funciones  {: RESULT = String.format(funciones); :}
 ;
 
 
@@ -106,10 +144,10 @@ M7 ::= LLAVES_A D7 LLAVES_C
     | LLAVES_A D7 LLAVES_C COMA M7
 ;
 
-D7 ::= N COMA T COMA P7
+D7 ::= N:nombre COMA T:tipo COMA P7:parametros     {: crearMetodo(nombre,tipo,parametros); :}
 ;
 
-P7 ::= PARAMETROS DOS_PUNTOS CADENA
+P7 ::= PARAMETROS DOS_PUNTOS CADENA:parametros   {: RESULT = String.format(parametros); :}
 ;
 
 
@@ -122,16 +160,18 @@ R2 ::= S3
 
 //GENERA LA INICIALIZACION DE UN REPORTE
 
-R1 ::= N1 DOS_PUNTOS CORCHETE_A
+V ::= R1 CORCHETE_C
 ;
 
+R1 ::= N1 DOS_PUNTOS CORCHETE_A
+;
 
 N1 ::= CLASES
    | VARIABLES
    | METODOS
 ;
 
-N ::= NOMBRE DOS_PUNTOS CADENA
+N ::= NOMBRE DOS_PUNTOS CADENA:nombre {: RESULT = String.format(nombre); :}
 ;
 
 T ::= TIPO DOS_PUNTOS CADENA
