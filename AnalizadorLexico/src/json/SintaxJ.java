@@ -247,6 +247,7 @@ public class SintaxJ extends java_cup.runtime.lr_parser {
     private ArrayList<Clase> clases = new ArrayList<>();
     private ArrayList<Variable> variables = new ArrayList<>();
     private ArrayList<Funcion> funciones = new ArrayList<>();
+    private ArrayList<String> errores = new ArrayList<>();
 
     public void crearClase(String nombre) {
         Clase clase = new Clase(nombre);
@@ -275,6 +276,8 @@ public class SintaxJ extends java_cup.runtime.lr_parser {
     public void syntax_error(Symbol cur_token) {
         System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
         System.out.println(String.format("En la posicion: %d, %d", cur_token.left, cur_token.right));
+        String error = "Error en Simbolo "+sym.terminalNames[cur_token.sym]+" En la posicion: " + " " + cur_token.left + " , " + cur_token.right;
+        this.errores.add(error);
     }
 
     public void unrecovered_syntax_error(Symbol cur_token) {
@@ -672,7 +675,6 @@ public class SintaxJ extends java_cup.runtime.lr_parser {
         }
 
         /* end of method */
-
         /**
          * Method splitting the generated action code into several parts.
          */
@@ -700,6 +702,10 @@ public class SintaxJ extends java_cup.runtime.lr_parser {
 
     public ArrayList<Funcion> getFunciones() {
         return funciones;
+    }
+
+    public ArrayList<String> getErrores() {
+        return errores;
     }
     
     

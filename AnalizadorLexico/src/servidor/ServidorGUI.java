@@ -208,6 +208,7 @@ public class ServidorGUI extends javax.swing.JFrame implements Runnable {
         String reporteTotal = reporte.getReporteTotal();
 
         try {
+            // "192.168.1.16"  este es mi verdadera IP jeje xd
             Socket socket = new Socket("192.168.1.16", 6666);
             System.out.println("Conectados!");
             OutputStream outputStream = socket.getOutputStream();

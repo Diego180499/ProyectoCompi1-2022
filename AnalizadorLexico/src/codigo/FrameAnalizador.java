@@ -40,6 +40,7 @@ public class FrameAnalizador extends javax.swing.JFrame implements Runnable {
     private ArrayList<Clase> clasesJSON;
     private ArrayList<Variable> variablesJSON;
     private ArrayList<Funcion> funcionesJSON;
+    private ArrayList<String> erroresJson;
 
     /**
      * Creates new form FrameAnalizador
@@ -54,6 +55,7 @@ public class FrameAnalizador extends javax.swing.JFrame implements Runnable {
         clasesJSON = new ArrayList<>();
         variablesJSON = new ArrayList<>();
         funcionesJSON = new ArrayList<>();
+        erroresJson = new ArrayList<>();
         Thread miHilo = new Thread(this);
         miHilo.start();
     }
@@ -84,6 +86,7 @@ public class FrameAnalizador extends javax.swing.JFrame implements Runnable {
         jScrollPane2 = new javax.swing.JScrollPane();
         resultadosJSON = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
+        botonVerErrores = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         guardarJSON = new javax.swing.JMenuItem();
@@ -170,6 +173,15 @@ public class FrameAnalizador extends javax.swing.JFrame implements Runnable {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("RESULTADOS     DEL     JSON");
 
+        botonVerErrores.setBackground(new java.awt.Color(255, 153, 51));
+        botonVerErrores.setForeground(new java.awt.Color(0, 0, 0));
+        botonVerErrores.setText("ERRORES JSON");
+        botonVerErrores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonVerErroresActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -189,7 +201,7 @@ public class FrameAnalizador extends javax.swing.JFrame implements Runnable {
                                     .addComponent(pathCarpeta1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(botonExaminarCarpeta1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 147, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -203,13 +215,14 @@ public class FrameAnalizador extends javax.swing.JFrame implements Runnable {
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(28, 28, 28)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(botonVerClases, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(botonVerVariables, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(botonVerMetodos, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(botonVerMetodos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(botonVerVariables, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(botonVerClases, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(botonVerErrores, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
                         .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
@@ -241,7 +254,9 @@ public class FrameAnalizador extends javax.swing.JFrame implements Runnable {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(botonVerVariables)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(botonVerMetodos)))
+                        .addComponent(botonVerMetodos)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonVerErrores)))
                 .addContainerGap())
         );
 
@@ -271,7 +286,10 @@ public class FrameAnalizador extends javax.swing.JFrame implements Runnable {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(28, 28, 28))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -351,6 +369,7 @@ public class FrameAnalizador extends javax.swing.JFrame implements Runnable {
             clasesJSON = sintax.getClases();
             variablesJSON = sintax.getVariables();
             funcionesJSON = sintax.getFunciones();
+            erroresJson = sintax.getErrores();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -373,7 +392,7 @@ public class FrameAnalizador extends javax.swing.JFrame implements Runnable {
         String vistaClases = "";
 
         for (int i = 0; i < clasesJSON.size(); i++) {
-            vistaClases += "Clase " + (i + 1) + ": " + clasesJSON.get(i).getNombreClase()+"\n";
+            vistaClases += "Clase " + (i + 1) + ": " + clasesJSON.get(i).getNombreClase() + "\n";
         }
         resultadosJSON.setText(vistaClases);
     }//GEN-LAST:event_botonVerClasesActionPerformed
@@ -383,7 +402,7 @@ public class FrameAnalizador extends javax.swing.JFrame implements Runnable {
         String vistaVariables = "";
 
         for (int i = 0; i < variablesJSON.size(); i++) {
-            vistaVariables += "Variable " + (i + 1) + ": Nombre:" + variablesJSON.get(i).getNombre() + "  Tipo: " + variablesJSON.get(i).getTipo()+"\n";
+            vistaVariables += "Variable " + (i + 1) + ": Nombre:" + variablesJSON.get(i).getNombre() + "  Tipo: " + variablesJSON.get(i).getTipo() + "\n";
         }
 
         resultadosJSON.setText(vistaVariables);
@@ -395,11 +414,21 @@ public class FrameAnalizador extends javax.swing.JFrame implements Runnable {
 
         for (int i = 0; i < funcionesJSON.size(); i++) {
             vistaMetodos += "Funcion " + (i + 1) + ":  Nombre: " + funcionesJSON.get(i).getNombre() + "   Tipo: " + funcionesJSON.get(i).getTipo()
-                    + "   Parametros: " + funcionesJSON.get(i).getCantidad_parametros()+"\n";
+                    + "   Parametros: " + funcionesJSON.get(i).getCantidad_parametros() + "\n";
         }
 
         resultadosJSON.setText(vistaMetodos);
     }//GEN-LAST:event_botonVerMetodosActionPerformed
+
+    private void botonVerErroresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonVerErroresActionPerformed
+    
+        String errores = "";
+
+        for (int i = 0; i < erroresJson.size(); i++) {
+            errores += erroresJson.get(i) + "\n";
+        }
+        resultadosJSON.setText(errores);
+    }//GEN-LAST:event_botonVerErroresActionPerformed
 
     /**
      * @param args the command line arguments
@@ -521,6 +550,7 @@ public class FrameAnalizador extends javax.swing.JFrame implements Runnable {
     private javax.swing.JButton botonExaminarCarpeta1;
     private javax.swing.JButton botonExaminarCarpeta2;
     private javax.swing.JButton botonVerClases;
+    private javax.swing.JButton botonVerErrores;
     private javax.swing.JButton botonVerMetodos;
     private javax.swing.JButton botonVerVariables;
     private javax.swing.JMenuItem guardarJSON;

@@ -12,6 +12,7 @@ parser code
     private ArrayList<Clase> clases = new ArrayList<>();
     private ArrayList<Variable> variables = new ArrayList<>();
     private ArrayList<Funcion> funciones = new ArrayList<>();
+    private ArrayList<String> errores = new ArrayList<>();
     
 
     public void crearClase(String nombre){
@@ -41,6 +42,8 @@ parser code
     public void syntax_error(Symbol cur_token) {
         System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
         System.out.println(String.format("En la posicion: %d, %d", cur_token.left, cur_token.right));
+        String error = "Error en simbolo: "+sym.terminalNames[cur_token.sym]+" posicion: %d, %d"+, cur_token.left, cur_token.right);
+        this.errores.add(error);
     }
 
     public void unrecovered_syntax_error(Symbol cur_token) {
