@@ -82,7 +82,7 @@ public class ReporteJSON {
             if (metodos.get(i).getAparicion() > 1) {
                 reporteMetodos += "{Nombre: \"" + metodos.get(i).getNombre()
                         + "\", Tipo: \"" + metodos.get(i).getTipo()
-                        + "\", Parametros: \"" + metodos.get(i).getParametros().size() + "\" }";
+                        + "\", Parametros: " + metodos.get(i).getParametros().size() + " }";
             }
 
             if (i == metodos.size() - 1) {

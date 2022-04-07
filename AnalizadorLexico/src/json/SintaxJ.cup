@@ -1,44 +1,61 @@
 package json;
+import java_cup.runtime.*;
 import codigo.*;
-
-
-import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 
-parser code
+//1. user code
 
-{:
+parser code 
+
+{://código que modifica el comportamiento del parser [sobreescribiendo o creado métodos]
     
-    private Symbol s;
-    private ArrayList<Clase> clases = new ArrayList<>(); 
-    private ArrayList<Variable> variables = new ArrayList<Variable>();
-    private ArrayList<Funcion> funciones = new ArrayList<Funcion>();
+    private ArrayList<Clase> clases = new ArrayList<>();
+    private ArrayList<Variable> variables = new ArrayList<>();
+    private ArrayList<Funcion> funciones = new ArrayList<>();
     
-
-    public Symbol getS(){
-        return this.s;
-    }
-
 
     public void crearClase(String nombre){
         Clase clase = new Clase(nombre);
         this.clases.add(clase);
     }
 
-    public void crearVariable(String nombre, String tipo, String funciones){
-        Variable variable = new Variable(nombre, tipo, funciones);
+    public void crearVariable(String tipo, String nombre){
+        Variable variable = new Variable(tipo,nombre);
         this.variables.add(variable);
     }
 
-    public void crearMetodo(String nombre, String tipo, String parametros){
-        
-        Funcion funcion = new Funcion(nombre, tipo, parametros);
+    public void crearMetodo(String tipo, String nombre, String parametros){
+        Funcion funcion = new Funcion(tipo, nombre);
+        funcion.setCantidad_parametros(parametros);
         this.funciones.add(funcion);
     }
+  
+    public void report_error(String message, Object info) {
+        System.out.println("public void report_error");
+    }
 
+    public void report_fatal_error(String message, Object info) {
+        System.out.println("public void report_fatal_error");
+    }
 
-    /* LOS GET´S DE LOS ARRAYS*/
-    
+    public void syntax_error(Symbol cur_token) {
+        System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
+        System.out.println(String.format("En la posicion: %d, %d", cur_token.left, cur_token.right));
+    }
+
+    public void unrecovered_syntax_error(Symbol cur_token) {
+        if (cur_token.sym == sym.EOF) {
+            System.out.println("public void unrecoveredsyntax_error");
+        }
+    }
+    protected int error_sync_size(){
+        return 1;
+    }
+
+    public ArrayList<Clase> getClases(){
+        return this.clases;
+    }
+
     public ArrayList<Variable> getVariables(){
         return this.variables;
     }
@@ -46,133 +63,116 @@ parser code
     public ArrayList<Funcion> getFunciones(){
         return this.funciones;
     }
+   
+    
 
-    public ArrayList<Clase> getClases(){
-        return this.clases;
-    }
-
-:};
+//
+:}//
 
 
-terminal String CLASES;
-terminal String VARIABLES;
-terminal String METODOS;
-terminal String NOMBRE;
-terminal String LLAVES_A;
-terminal String LLAVES_C;
-terminal String CORCHETE_A;
-terminal String CORCHETE_C;
-terminal String COMA;
-terminal String DOS_PUNTOS;
-terminal String PUNTO;
-terminal String COMILLAS;
+terminal CLASES;
+terminal SCORE;
+terminal VARIABLES;
+terminal METODOS;
+terminal COMENTARIOS;
+terminal NOMBRE;
+terminal TIPO;
+terminal FUNCION;
+terminal PARAMETROS;
+terminal TEXTO;
 terminal String IDENTIFICADOR;
-terminal String P_COMA;
-terminal String TIPO;
-terminal String NUMERO;
-terminal String PARAMETROS;
-terminal String FUNCION;
+terminal COLON;
+terminal String COMA;
+terminal OPENBRACE;
+terminal CLOSEBRACE;
+terminal OPENBRACKET;
+terminal CLOSEBRACKET;
 terminal String CADENA;
+terminal String NUMERO;
+terminal String DECIMAL;
+terminal COMILLA;
 
 
-non terminal String S1;
-non terminal String S2;
-non terminal String S3;
-non terminal String D3;
-non terminal String N3;
-non terminal String S4;
-non terminal String D4;
-non terminal String N4;
-non terminal String T4;
-non terminal String S7;
-non terminal String M7;
-non terminal String D7;
-non terminal String N7;
-non terminal String T7;
-non terminal String P7;
-non terminal String R2;
-non terminal String R1;
-non terminal String N1;
-non terminal String N;
-non terminal String F4;
-non terminal String T;
-non terminal String V;
+non terminal score;
+non terminal clases;
+non terminal classBody;
+non terminal className;
+non terminal variables;
+non terminal varBody;
+non terminal singleVar;
+non terminal metodos;
+non terminal metodosBody;
+non terminal singleMetodo;
+non terminal comentarios;
+non terminal comentarioBody;
+non terminal singleComment;
+non terminal inicio;
+non terminal cuerpo;
+non terminal cadena;
+non terminal String cadenaBody;
 
-start with S1;
 
-/* AQUI VAN LAS PRODUCCIONES */
+start with inicio;
 
-S1 ::= LLAVES_A S2 LLAVES_C
+inicio ::= OPENBRACE cuerpo CLOSEBRACE;
+
+cuerpo::= score COMA cuerpo
+    |clases COMA cuerpo
+    |variables COMA cuerpo
+    |metodos COMA cuerpo
+    |comentarios COMA cuerpo
+    |clases
+    |variables
+    |metodos
+    |comentarios
+    |
+    ;
+
+//PRODUCCION DEL SCORE
+score::= SCORE COLON DECIMAL:n {:System.out.println("El score es: "+n);:}
+|SCORE COLON NUMERO:n {:System.out.println("El score es: "+n);:}
 ;
 
-S2 ::= R2
-    | R2 COMA S2
+cadena::= COMILLA cadenaBody COMILLA
 ;
 
-//PRODUCCION QUE GENERA REPORTES DE UNA CLASE
-S3 ::= R1 D3 CORCHETE_C 
-    | V
+cadenaBody::= CADENA:c COMA {:System.out.println("funcion: "+c);:} cadenaBody
+    |CADENA:c {:System.out.println("funcion: "+c);:}
 ;
 
+//PRODUCCION DE LAS CLASES
+clases::=  CLASES COLON OPENBRACKET classBody CLOSEBRACKET;
 
-D3 ::= LLAVES_A N:nombre LLAVES_C  {: System.out.println(nombre); :}            
-    | LLAVES_A N:nombre LLAVES_C COMA D3  {: System.out.println(nombre); :}
+classBody ::= className COMA classBody
+    |className
+    ;
+
+className ::= OPENBRACE NOMBRE COLON COMILLA CADENA:c COMILLA CLOSEBRACE {: crearClase(c); :};
+
+
+//PRODUCCION DE LAS VARIABLES
+variables ::= VARIABLES COLON OPENBRACKET varBody CLOSEBRACKET;
+
+varBody ::= singleVar COMA varBody
+    |singleVar
 ;
 
-
-
-// ESTRUCTURA DE LOS REPORTES DE LAS VARIABLES
-S4 ::= R1 D4 CORCHETE_C
+singleVar::=OPENBRACE NOMBRE COLON COMILLA CADENA:n COMILLA COMA TIPO COLON COMILLA CADENA:t COMILLA COMA FUNCION COLON cadena CLOSEBRACE
+{: crearVariable(t,n); :}
 ;
 
-D4 ::= LLAVES_A N COMA T COMA F4 LLAVES_C
-  | LLAVES_A N COMA T COMA F4 LLAVES_C COMA D4
+//PRODUCCION DE METODOS
+metodos::= METODOS COLON OPENBRACKET metodosBody CLOSEBRACKET;
+metodosBody ::= singleMetodo COMA metodosBody
+    |singleMetodo
 ;
 
-
-F4 ::= FUNCION DOS_PUNTOS CADENA
+singleMetodo ::= OPENBRACE NOMBRE COLON COMILLA CADENA:n COMILLA COMA TIPO COLON COMILLA CADENA:t COMILLA COMA PARAMETROS COLON NUMERO:p CLOSEBRACE
+{: crearMetodo(t,n,p); :}
 ;
 
-
-
-
-// ESTRUCTURA DE LOS REPORTES DE METODOS
-
-S7 ::= R1 M7 CORCHETE_C
+comentarios::= COMENTARIOS COLON OPENBRACKET comentarioBody CLOSEBRACKET;
+comentarioBody::= singleComment COMA comentarioBody
+    |singleComment
 ;
-
-M7 ::= LLAVES_A D7 LLAVES_C
-    | LLAVES_A D7 LLAVES_C COMA M7
-;
-
-D7 ::= N COMA T COMA P7
-;
-
-P7 ::= PARAMETROS DOS_PUNTOS CADENA
-;
-
-// ESTA PRODUCCION GENERA LOS REPORTES
-R2 ::= S3
-    |  S4
-    |  S7
-;
-
-
-//GENERA LA INICIALIZACION DE UN REPORTE
-
-V ::= R1 CORCHETE_C
-;
-
-R1 ::= N1 DOS_PUNTOS CORCHETE_A
-;
-
-N1 ::= CLASES
-   | VARIABLES
-   | METODOS
-;
-
-N ::= NOMBRE DOS_PUNTOS CADENA:cadena {: RESULT = String.format(cadena); :}
-;
-
-T ::= TIPO DOS_PUNTOS CADENA
-;
+singleComment::= OPENBRACE TEXTO COLON CADENA CLOSEBRACE;

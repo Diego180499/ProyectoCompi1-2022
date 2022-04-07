@@ -6,7 +6,7 @@
 package json;
 
 /** CUP generated class containing symbol constants. */
-public class sym {
+public class SintaxSym {
   /* terminals */
   public static final int CLOSEBRACE = 16;
   public static final int CADENA = 19;

@@ -234,7 +234,7 @@ C2 ::= I2 V CLASE IDENTIFICADOR:nombre LLAVES_A E2:variables LLAVES_C  {: crearC
 ;
 
 
-E2 ::= S13:s  {: RESULT = String.format(s); :} 
+E2 ::= S13:s     {: RESULT = String.format(s); :} 
     | S13:s E2:e {: RESULT = String.format(s+","+e); :}
 ;
 
